@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Salva l'account di Leo – Informatica al Righi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --vio:#7b2ff7;--pink:#f107a3;--ora:#ff8a00;--yel:#ffd23f;--cya:#00c2ff;--gre:#18c964;--red:#ff3b5c;
+  --ink:#1d1340;--muted:#6b6290;--card:#fff;--soft:#f4efff;
+  --grad:linear-gradient(135deg,#7b2ff7 0%,#f107a3 55%,#ff8a00 100%);
+  --head:'Fredoka','Nunito',system-ui,sans-serif;
+}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:'Nunito',system-ui,sans-serif;color:var(--ink);min-height:100vh;background:#f7f3ff;overflow-x:hidden}
+body:before,body:after{content:"";position:fixed;z-index:-1;border-radius:50%;filter:blur(60px);opacity:.45}
+body:before{width:420px;height:420px;background:#c9a7ff;top:-120px;right:-120px}
+body:after{width:380px;height:380px;background:#ffc0e3;bottom:-140px;left:-120px}
+h1,h2,h3{font-family:var(--head);margin:0;line-height:1.1}
+button,input,select{font-family:inherit}button{cursor:pointer}
+.wrap{max-width:980px;margin:0 auto;padding:14px 16px 50px}
+.hidden{display:none!important}
+
+/* barra */
+.bar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid #ebe3ff}
+.bar .in{max-width:980px;margin:0 auto;padding:8px 16px;display:flex;align-items:center;gap:10px}
+.bar .team{font-family:var(--head);font-weight:700;font-size:18px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chipx{background:var(--soft);border-radius:999px;padding:6px 12px;font-weight:900;font-variant-numeric:tabular-nums}
+
+/* bottoni */
+.btn{border:0;border-radius:16px;padding:14px 22px;font-family:var(--head);font-weight:700;font-size:19px;color:#fff;background:var(--grad);box-shadow:0 6px 0 #9a1d8a,0 10px 24px rgba(241,7,163,.25);transition:transform .08s}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 #9a1d8a}
+.btn.green{background:linear-gradient(135deg,#18c964,#0bb5a0);box-shadow:0 6px 0 #0a8a5c}
+.btn.light{background:#fff;color:var(--vio);box-shadow:0 4px 0 #d9ccff;border:2px solid #e6dcff}
+.btn.sm{font-size:15px;padding:9px 14px;border-radius:12px;box-shadow:0 4px 0 #9a1d8a}
+.btn.light.sm{box-shadow:0 3px 0 #d9ccff}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+
+/* intro */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center;padding-top:20px}
+.kicker{display:inline-block;background:#fff;border:2px solid #eadfff;border-radius:999px;padding:6px 14px;font-weight:900;font-size:13px;color:var(--vio)}
+.hero h1{font-size:clamp(40px,7.5vw,68px);margin-top:12px;letter-spacing:-.01em}
+.hero h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:18px;color:var(--muted);line-height:1.5}
+.leo{position:relative;background:var(--grad);border-radius:32px;padding:26px 22px 22px;color:#fff;box-shadow:0 20px 50px rgba(123,47,247,.3)}
+.leo .face{font-size:90px;line-height:1;filter:drop-shadow(0 6px 10px rgba(0,0,0,.2));animation:bob 2.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px) rotate(-3deg)}}
+.leo .bub{background:#fff;color:var(--ink);border-radius:20px;padding:14px 16px;margin-top:12px;font-weight:700;line-height:1.45;position:relative}
+.leo .bub:before{content:"";position:absolute;top:-10px;left:36px;border:10px solid transparent;border-top:0;border-bottom-color:#fff}
+.start{background:#fff;border-radius:24px;padding:18px;margin-top:22px;box-shadow:0 10px 30px rgba(123,47,247,.1)}
+.mlist{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin:4px 0 16px}
+.mlist div{display:flex;align-items:center;gap:10px;background:var(--soft);border-radius:16px;padding:10px 12px;font-weight:800}
+.mlist span{font-size:26px}
+.field{display:flex;gap:10px;flex-wrap:wrap}
+.field input{flex:1;min-width:200px;font-size:19px;font-weight:800;padding:14px 16px;border-radius:16px;border:3px solid #e6dcff;outline:none}
+.field input:focus{border-color:var(--vio)}
+
+/* mappa */
+.maptitle{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:18px;flex-wrap:wrap}
+.maptitle h2{font-size:32px}
+.path{display:grid;gap:16px;margin-top:18px;position:relative}
+.lvl{display:flex;align-items:center;gap:16px;background:#fff;border-radius:24px;padding:16px;box-shadow:0 8px 24px rgba(123,47,247,.10);border:3px solid transparent;text-align:left;width:100%;color:var(--ink)}
+.lvl:nth-child(even){margin-left:clamp(0px,8vw,80px);width:calc(100% - clamp(0px,8vw,80px))}
+.lvl .b{flex:none;width:74px;height:74px;border-radius:22px;display:grid;place-items:center;font-size:40px;background:var(--g);box-shadow:0 6px 0 rgba(0,0,0,.12)}
+.lvl h3{font-size:22px}
+.lvl .sub{color:var(--muted);font-weight:700;margin-top:2px}
+.lvl .subj{display:inline-block;margin-top:6px;font-size:12px;font-weight:900;background:var(--soft);color:var(--vio);border-radius:999px;padding:3px 10px}
+.lvl .right{margin-left:auto;text-align:right;font-size:22px;white-space:nowrap}
+.lvl.lock{opacity:.5;filter:grayscale(.6);cursor:not-allowed}
+.lvl.cur{border-color:#f107a3;animation:pulse 1.6s infinite}
+@keyframes pulse{50%{box-shadow:0 8px 30px rgba(241,7,163,.35)}}
+.lvl.ok{border-color:#b5f0cf}
+
+/* missione */
+.mhead{display:flex;gap:14px;align-items:center;margin-top:10px}
+.mhead .b{width:62px;height:62px;border-radius:20px;display:grid;place-items:center;font-size:34px;background:var(--g);flex:none}
+.mhead h2{font-size:28px}
+.mhead .subj{display:inline-block;margin-top:4px;font-size:12px;font-weight:900;background:#fff;color:var(--vio);border-radius:999px;padding:3px 10px}
+.mgrid{display:grid;grid-template-columns:1fr 360px;gap:22px;align-items:start;margin-top:14px}
+.side{background:#fff;border-radius:24px;padding:18px;box-shadow:0 8px 24px rgba(123,47,247,.08)}
+.side p{line-height:1.55;margin:0 0 10px;font-size:16px}
+.leosays{display:flex;gap:10px;align-items:flex-start;background:var(--soft);border-radius:18px;padding:12px}
+.leosays .f{font-size:34px;line-height:1}
+.leosays p{margin:0;font-weight:700}
+.todo{font-family:var(--head);font-size:20px;margin:14px 0 6px}
+.hintbox{margin-top:12px;background:#fff8d6;border-radius:16px;padding:12px 14px;font-weight:700;line-height:1.5}
+.fb{min-height:24px;margin-top:10px;font-weight:900}
+.fb.bad{color:var(--red)}.fb.good{color:var(--gre)}
+.shake{animation:sh .4s}@keyframes sh{0%,100%{transform:none}20%{transform:translateX(-8px)}60%{transform:translateX(8px)}}
+
+/* telefono */
+.phone{width:340px;max-width:100%;margin:0 auto;background:#141029;border-radius:46px;padding:12px;box-shadow:0 30px 60px rgba(29,19,64,.35),inset 0 0 0 2px #2c2650}
+.screen{position:relative;background:#fff;border-radius:36px;overflow:hidden;min-height:560px;display:flex;flex-direction:column}
+.status{display:flex;justify-content:space-between;align-items:center;padding:12px 22px 6px;font-weight:900;font-size:13px;position:relative;z-index:2}
+.status .notch{position:absolute;left:50%;top:8px;transform:translateX(-50%);width:96px;height:24px;background:#141029;border-radius:14px}
+.status .ic{display:flex;gap:5px;align-items:center}
+.appbar{padding:8px 16px 10px;font-family:var(--head);font-weight:700;font-size:20px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #f0ecfa}
+.scr{flex:1;padding:12px 14px;overflow:auto;position:relative}
+
+/* wifi */
+.cartello{background:#fff59d;border-radius:6px;padding:14px 16px;transform:rotate(-2deg);box-shadow:0 8px 18px rgba(0,0,0,.12);font-family:var(--head);font-size:18px;max-width:280px;margin:14px auto 4px;position:relative}
+.cartello:before{content:"📌";position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:22px}
+.cartello b{font-family:'Nunito',system-ui,sans-serif;font-weight:900;font-size:19px;letter-spacing:.02em}
+.net{display:flex;align-items:center;gap:10px;padding:13px 6px;border-bottom:1px solid #f0ecfa;width:100%;background:none;border-left:0;border-right:0;border-top:0;text-align:left;font-size:16px;font-weight:800;color:var(--ink)}
+.net .n{flex:1}
+.net small{display:block;font-weight:700;color:var(--muted);font-size:12px}
+.sig{display:inline-flex;gap:2px;align-items:flex-end;height:16px}
+.sig i{width:4px;background:#cfc7e8;border-radius:2px}
+.sig i.on{background:var(--ink)}
+.alert{border-radius:16px;padding:12px;margin-top:10px;font-weight:800;line-height:1.4;font-size:14px}
+.alert.r{background:#ffe5ea;color:#b4002a}.alert.g{background:#ddf9e9;color:#0a7a45}
+.pwin{width:100%;font-size:18px;font-weight:800;padding:12px;border-radius:12px;border:2px solid #e6dcff;margin:8px 0;outline:none}
+.pwin:focus{border-color:var(--vio)}
+
+/* chat */
+.chat{background:#efe7dd;flex:1;padding:12px;overflow:auto;background-image:radial-gradient(#e2d7c8 1px,transparent 1px);background-size:14px 14px}
+.chathead{display:flex;gap:10px;align-items:center;background:#075e54;color:#fff;padding:10px 14px}
+.chathead .av{width:38px;height:38px;border-radius:50%;background:#ccc;display:grid;place-items:center;font-size:22px}
+.msg{background:#fff;border-radius:4px 16px 16px 16px;padding:10px 12px;max-width:92%;font-size:15.5px;line-height:1.55;box-shadow:0 1px 1px rgba(0,0,0,.08);position:relative}
+.msg .tm{display:block;text-align:right;font-size:11px;color:#8a8a8a;margin-top:4px}
+.seg{cursor:pointer;border-radius:5px;padding:1px 2px;transition:background .15s}
+.seg:hover{background:#fff3b0}
+.seg.found{background:#ff3b5c;color:#fff}
+.seg.nope{background:#e6e6e6}
+.flags{display:grid;gap:6px;margin-top:10px}
+.flag{background:#fff;border-left:5px solid var(--red);border-radius:10px;padding:8px 10px;font-weight:800;font-size:14px;animation:pop .35s}
+.counter{font-family:var(--head);font-size:20px;margin:6px 0}
+.choices{display:grid;gap:8px;margin-top:10px}
+.choices button{border:2px solid #e6dcff;background:#fff;border-radius:14px;padding:12px;font-weight:800;font-size:15px;text-align:left;color:var(--ink)}
+.choices button:hover{border-color:var(--vio)}
+
+/* gioco */
+.blocks{display:grid;gap:10px;margin-top:6px}
+.blk{display:flex;flex-wrap:wrap;align-items:center;gap:6px;border-radius:12px;padding:10px 12px;color:#fff;font-weight:900;font-size:15px;box-shadow:0 4px 0 rgba(0,0,0,.18)}
+.blk.ev{background:#ffab19;border-radius:22px 12px 12px 12px}
+.blk.if{background:#ff6680}
+.blk select{font-weight:900;font-size:14px;border:0;border-radius:999px;padding:6px 10px;color:var(--ink);background:#fff}
+.blk .arrow{opacity:.85}
+canvas#game{width:100%;display:block;border-radius:16px;touch-action:manipulation;background:#bdf}
+.hud{display:flex;justify-content:space-between;font-family:var(--head);font-size:18px;margin:8px 2px}
+.tapbtn{width:100%;margin-top:8px;font-size:22px}
+
+/* feed */
+.feed{flex:1;display:flex;flex-direction:column;background:#000;color:#fff}
+.vid{flex:1;margin:0;display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative;min-height:380px;transition:transform .25s,opacity .25s}
+.vid .big{position:absolute;inset:0;display:grid;place-items:center;font-size:120px;filter:drop-shadow(0 10px 20px rgba(0,0,0,.35))}
+.vid h4{font-family:var(--head);font-size:21px;margin:0;position:relative;text-shadow:0 2px 6px rgba(0,0,0,.4)}
+.vid .tag{position:relative;font-weight:800;opacity:.9;margin-top:4px}
+.vid .cnt{position:absolute;top:12px;left:14px;background:rgba(0,0,0,.35);border-radius:999px;padding:3px 10px;font-weight:900;font-size:13px}
+.vbtns{display:flex;gap:10px;padding:12px;background:#000}
+.vbtns button{flex:1;border:0;border-radius:16px;padding:14px;font-size:20px;font-weight:900;font-family:var(--head)}
+.vbtns .like{background:#ff3b5c;color:#fff}.vbtns .skip{background:#2b2b3a;color:#fff}
+.bars{display:grid;gap:8px;margin-top:8px}
+.barrow{display:grid;grid-template-columns:90px 1fr 40px;gap:8px;align-items:center;font-weight:800;font-size:14px}
+.barrow .tr{height:14px;background:#efe9ff;border-radius:8px;overflow:hidden}
+.barrow .tr i{display:block;height:100%;border-radius:8px;background:var(--grad);transition:width .8s}
+.reco{border-radius:18px;color:#fff;padding:14px;margin-top:12px;display:flex;gap:12px;align-items:center}
+.reco .e{font-size:48px}
+.thinking{text-align:center;padding:40px 10px;font-family:var(--head);font-size:20px}
+.dots:after{content:"";animation:dots 1.2s steps(4) infinite}
+@keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}
+
+/* vittoria */
+.overlay{position:fixed;inset:0;z-index:50;background:rgba(29,19,64,.55);display:grid;place-items:center;padding:16px;backdrop-filter:blur(3px)}
+.modal{background:#fff;border-radius:28px;max-width:460px;width:100%;padding:24px;text-align:center;animation:pop .4s;max-height:92vh;overflow:auto}
+@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+.modal .badge{width:110px;height:110px;margin:0 auto;border-radius:32px;display:grid;place-items:center;font-size:62px;background:var(--g);box-shadow:0 10px 30px rgba(0,0,0,.15)}
+.modal h2{font-size:30px;margin-top:14px}
+.stars{font-size:38px;letter-spacing:4px;margin:6px 0}
+.stars .off{filter:grayscale(1);opacity:.3}
+.learn{text-align:left;background:var(--soft);border-radius:18px;padding:12px 14px;margin-top:12px;line-height:1.5;font-size:15px}
+.learn b{color:var(--vio)}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:60;overflow:hidden}
+.confetti i{position:absolute;top:-30px;font-style:normal;font-size:24px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+
+/* finale */
+.endhero{text-align:center;padding-top:20px}
+.endhero h1{font-size:clamp(36px,7vw,58px)}
+.endhero h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.badges{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:16px 0}
+.bdg{background:#fff;border-radius:22px;padding:12px;width:140px;text-align:center;box-shadow:0 8px 20px rgba(123,47,247,.1)}
+.bdg .i{width:64px;height:64px;margin:0 auto;border-radius:20px;display:grid;place-items:center;font-size:36px;background:var(--g)}
+.bdg b{display:block;margin-top:8px;font-family:var(--head);font-size:16px}
+.bdg small{font-size:18px}
+.sec{background:#fff;border-radius:26px;padding:20px;margin-top:16px;box-shadow:0 8px 24px rgba(123,47,247,.08)}
+.sec h2{font-size:26px}
+.sec p{line-height:1.55}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px}
+.cardj{border-radius:20px;padding:16px;color:#fff;background:var(--g)}
+.cardj .e{font-size:38px}
+.cardj b{display:block;font-family:var(--head);font-size:19px;margin-top:6px}
+.cardj p{margin:4px 0 0;font-size:14px;line-height:1.45;opacity:.95}
+.learnlist{display:grid;gap:10px;margin-top:10px}
+.learnlist div{display:flex;gap:12px;align-items:center;background:var(--soft);border-radius:16px;padding:12px;font-weight:800}
+.learnlist span{font-size:28px}
+.openday{margin-top:16px;border-radius:26px;padding:22px;background:var(--grad);color:#fff;box-shadow:0 16px 40px rgba(241,7,163,.25)}
+.openday h2{font-size:32px}
+.openday ul{margin:10px 0 0;padding-left:20px;font-weight:900;line-height:1.8;font-size:17px}
+.openday a{color:#fff}
+.foot{text-align:center;margin-top:22px}
+
+@media (max-width:820px){
+  .hero{grid-template-columns:1fr}
+  .mgrid{grid-template-columns:1fr}
+}
+@media (max-width:420px){
+  .wrap{padding:10px 10px 40px}
+  .phone{border-radius:34px;padding:8px}
+  .screen{border-radius:28px;min-height:520px}
+  .lvl:nth-child(even){margin-left:0;width:100%}
+  .lvl .b{width:60px;height:60px;font-size:32px}
+  .lvl h3{font-size:19px}
+}
+</style>
+</head>
+<body>
+<div class="bar hidden" id="bar"><div class="in">
+  <div class="team" id="tn"></div><div class="chipx" id="st">⭐ 0</div><div class="chipx" id="tm">⏱ 00:00</div>
+</div></div>
+<main class="wrap" id="app"></main>
+<div id="layer"></div>
+
+<script>
+/* ============================== DATI ============================== */
+const M=[
+ {id:'wifi',e:'📶',g:'linear-gradient(135deg,#00c2ff,#3a7bff)',title:'Connettiti al Wi-Fi',sub:'Leo è a scuola e deve andare online',subj:'Sistemi e reti',badge:'Re del Wi-Fi',
+  leo:'Sono in aula ma il telefono non ha Internet! Mi aiutate a collegarmi al Wi-Fi della scuola? Occhio: ci sono reti un po\' strane…',
+  todo:'Scegliete la rete giusta e inserite la password scritta sul cartello.',
+  hint:'La rete giusta ha lo stesso nome scritto sul cartello e il lucchetto 🔒. Nella password contano maiuscole, minuscole e simboli.',
+  fact:'Il Wi-Fi è una rete: il <b>router</b> collega tra loro telefoni e computer e li porta su Internet. Le reti aperte, senza lucchetto, o con nomi "copiati" possono essere trappole per spiare i dati.',
+  righi:'In <b>Sistemi e reti</b> imparerai come funzionano router, Wi-Fi e Internet e a configurare reti vere, anche con la Cisco Academy.'},
+ {id:'phish',e:'🕵️',g:'linear-gradient(135deg,#ff3b5c,#ff8a00)',title:'Scopri la truffa',sub:'Il messaggio che ha rubato l\'account',subj:'Cybersecurity',badge:'Cyber Detective',
+  leo:'Ieri mi è arrivato questo messaggio, ho cliccato e… mi hanno rubato l\'account del gioco! Dov\'era la fregatura?',
+  todo:'Toccate le parti sospette del messaggio: trovatene almeno 4 su 5.',
+  hint:'Guardate bene: chi lo manda, cosa promette, quanta fretta mette, come è scritto il link (lettera per lettera!) e cosa chiede.',
+  fact:'Questo trucco si chiama <b>phishing</b>: un messaggio finto che "pesca" le tue password. È uno degli attacchi più usati al mondo, anche contro le aziende.',
+  righi:'Nell\'indirizzo Informatica imparerai come si difendono persone, dati e reti dagli attacchi: è la <b>cybersecurity</b>, uno dei lavori più richiesti.'},
+ {id:'game',e:'🎮',g:'linear-gradient(135deg,#18c964,#00b3a4)',title:'Programma il videogioco',sub:'Leo deve finire il suo gioco per il torneo',subj:'Informatica · programmazione',badge:'Game Coder',
+  leo:'Account recuperato! Per il torneo della scuola devo presentare il mio gioco, ma il personaggio non salta e le monete non danno punti. Lo sistemate voi?',
+  todo:'Scegliete i comandi giusti nei blocchi, poi premete Gioca e fate 5 punti.',
+  hint:'Il personaggio deve saltare quando toccate lo schermo, e ogni moneta deve dare +1 punto.',
+  fact:'Avete usato <b>eventi</b> ("quando succede questo…") e <b>condizioni</b> ("se tocca…"): sono le stesse basi con cui si programmano i veri videogiochi e le app.',
+  righi:'In <b>Informatica</b> imparerai a programmare con veri linguaggi di programmazione per creare app, siti web e videogiochi.'},
+ {id:'ai',e:'🤖',g:'linear-gradient(135deg,#7b2ff7,#f107a3)',title:'Allena l\'algoritmo',sub:'Come fa un\'app a sapere cosa ti piace?',subj:'Informatica · dati e IA',badge:'AI Trainer',
+  leo:'Ultima cosa: voglio mettere nel mio gioco dei video consigliati, come fanno le app di video. Ma come fa l\'app a capire cosa ci piace?',
+  todo:'Mettete ❤️ ai video che piacciono a voi e ⏭ a quelli che non vi interessano. Poi guardate cosa vi consiglia l\'algoritmo.',
+  hint:'L\'algoritmo conta i like che avete messo per ogni tipo di video e vi consiglia il tipo che vi è piaciuto di più.',
+  fact:'Questo è il <b>machine learning</b>: l\'intelligenza artificiale impara dai dati, cioè dai vostri like, quanto tempo guardate un video e cosa saltate. Funzionano così i consigli delle app di video, musica e serie TV.',
+  righi:'Nell\'indirizzo Informatica imparerai a raccogliere e usare i <b>dati</b> e a capire come funziona l\'<b>intelligenza artificiale</b>.'}
+];
+const OPEN_DAYS=['domenica 13 dicembre 2026','domenica 10 gennaio 2027','domenica 17 gennaio 2027','domenica 24 gennaio 2027','domenica 31 gennaio 2027'];
+
+/* ============================== STATO ============================== */
+const KEY='leoRighi_v1';
+const fresh=()=>({team:'',start:0,end:0,cur:0,done:[],stars:[],err:[0,0,0,0],hint:[0,0,0,0],screen:'intro',mission:null});
+let S=(()=>{try{return JSON.parse(localStorage.getItem(KEY))||fresh();}catch(e){return fresh();}})();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}};
+const app=document.getElementById('app'),layer=document.getElementById('layer');
+const $=(s,r=document)=>r.querySelector(s);
+const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=s=>{s=Math.max(0,Math.floor(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');};
+const elapsed=()=>S.start?((S.end||Date.now())-S.start)/1000:0;
+const totStars=()=>S.stars.reduce((a,b)=>a+(b||0),0);
+let stopGame=null;
+
+function bar(){
+  const show=['map','mission'].includes(S.screen);$('#bar').classList.toggle('hidden',!show);if(!show)return;
+  $('#tn').textContent='🚀 Squadra '+S.team;$('#st').textContent='⭐ '+totStars();$('#tm').textContent='⏱ '+fmt(elapsed());
+}
+setInterval(()=>{if(S.start&&!S.end){const t=$('#tm');if(t)t.textContent='⏱ '+fmt(elapsed());}},500);
+function go(scr,m){if(stopGame){stopGame();stopGame=null;}layer.innerHTML='';S.screen=scr;if(m!=null)S.mission=m;save();render();window.scrollTo(0,0);}
+function render(){bar();({intro,map,mission,end})[S.screen]();}
+
+const phone=(inner,appbar)=>`<div class="phone"><div class="screen">
+  <div class="status"><span>15:30</span><span class="notch"></span><span class="ic">${S.done[0]?'📶':''} 🔋</span></div>
+  ${appbar?`<div class="appbar">${appbar}</div>`:''}${inner}</div></div>`;
+
+/* ============================== INTRO ============================== */
+function intro(){
+  app.innerHTML=`
+  <section class="hero">
+    <div><span class="kicker">💻 IISS "AUGUSTO RIGHI" · INDIRIZZO INFORMATICA</span>
+      <h1>Salva l'account<br>di <span>Leo</span>!</h1>
+      <p>4 missioni da vero informatico, con le cose che usate ogni giorno: Wi-Fi, chat, videogiochi e app.</p></div>
+    <div class="leo"><div class="face">🧑‍💻</div>
+      <div class="bub">Aiuto! Mi hanno rubato l'account del mio gioco preferito e sabato c'è il torneo della scuola! 😱 Mi date una mano?</div></div>
+  </section>
+  <div class="start">
+    <div class="mlist">${M.map(m=>`<div><span>${m.e}</span>${m.title}</div>`).join('')}</div>
+    <form class="field" id="f"><input id="tin" maxlength="18" placeholder="Nome della squadra" autocomplete="off" required><button class="btn" type="submit">Si parte! 🚀</button></form>
+    ${S.start&&!S.end?`<p style="margin:12px 0 0;font-weight:700">Partita in corso (squadra ${esc(S.team)}). <button class="btn light sm" id="resume">Riprendi</button></p>`:''}
+  </div>`;
+  $('#f').onsubmit=e=>{e.preventDefault();const n=$('#tin').value.trim();if(!n)return;S=fresh();S.team=n;S.start=Date.now();go('map');};
+  const r=$('#resume');if(r)r.onclick=()=>go('map');
+}
+
+/* ============================== MAPPA ============================== */
+function map(){
+  app.innerHTML=`<div class="maptitle"><h2>Le missioni di Leo</h2><span class="chipx">${S.done.filter(Boolean).length} / 4 completate</span></div>
+  <div class="path">${M.map((m,i)=>{const ok=S.done[i],cur=i===S.cur&&!ok,lock=i>S.cur;
+    return `<button class="lvl ${ok?'ok':''} ${cur?'cur':''} ${lock?'lock':''}" style="--g:${m.g}" data-i="${i}" ${lock?'disabled':''}>
+      <div class="b">${lock?'🔒':m.e}</div><div><div style="font-weight:900;color:#a39bc4;font-size:13px">MISSIONE ${i+1}</div><h3>${m.title}</h3><div class="sub">${m.sub}</div><span class="subj">📚 ${m.subj}</span></div>
+      <div class="right">${ok?'⭐'.repeat(S.stars[i])+'<span style="opacity:.25">'+'⭐'.repeat(3-S.stars[i])+'</span>':cur?'▶️':''}</div></button>`;}).join('')}</div>`;
+  app.querySelectorAll('.lvl:not([disabled])').forEach(b=>b.onclick=()=>go('mission',+b.dataset.i));
+}
+
+/* ============================== MISSIONE ============================== */
+function mission(){
+  const i=S.mission,m=M[i];
+  app.innerHTML=`<button class="btn light sm" id="back">← Mappa</button>
+  <div class="mhead"><div class="b" style="--g:${m.g};background:${m.g}">${m.e}</div><div><div style="font-weight:900;color:#a39bc4;font-size:13px">MISSIONE ${i+1} DI 4</div><h2>${m.title}</h2><span class="subj">📚 ${m.subj}</span></div></div>
+  <div class="mgrid"><div class="side">
+    <div class="leosays"><div class="f">🧑‍💻</div><p>${m.leo}</p></div>
+    <div class="todo">🎯 ${m.todo}</div>
+    <div id="side"></div>
+    <div class="fb" id="fb"></div>
+    <button class="btn light sm" id="hb">💡 ${S.hint[i]?'Mostra aiuto':'Aiuto (costa 1 ⭐)'}</button>
+    <div id="hbox"></div>
+  </div><div id="ph"></div></div>`;
+  $('#back').onclick=()=>go('map');
+  const showH=()=>$('#hbox').innerHTML=`<div class="hintbox">💡 ${m.hint}</div>`;
+  if(S.hint[i])showH();
+  $('#hb').onclick=()=>{if(!S.hint[i]){S.hint[i]=1;save();$('#hb').textContent='💡 Mostra aiuto';}showH();};
+  const ctx={
+    err:(msg)=>{S.err[i]++;save();const f=$('#fb');f.className='fb bad';f.textContent=msg;const p=$('#ph');p.classList.remove('shake');void p.offsetWidth;p.classList.add('shake');},
+    say:(msg,good)=>{const f=$('#fb');f.className='fb '+(good?'good':'');f.textContent=msg;},
+    win:()=>complete(i)
+  };
+  if(S.done[i]){$('#ph').innerHTML=phone('<div class="scr" style="display:grid;place-items:center;font-size:80px">✅</div>');$('#side').innerHTML='<p><b>Missione già completata!</b></p><button class="btn green sm" id="nx">Vai avanti ▶</button>';$('#nx').onclick=()=>go(i===3?'end':'map');return;}
+  GAMES[m.id]($('#ph'),$('#side'),ctx);
+}
+function complete(i){
+  if(stopGame){stopGame();stopGame=null;}
+  const m=M[i];let st=3-S.hint[i]-(S.err[i]>=3?1:0);st=Math.max(1,st);
+  S.done[i]=true;S.stars[i]=st;if(i===S.cur)S.cur=Math.min(3,i+1);if(i===3)S.end=Date.now();save();bar();
+  confetti();
+  layer.innerHTML=`<div class="overlay"><div class="modal" style="--g:${m.g}">
+    <div class="badge" style="background:${m.g}">${m.e}</div>
+    <h2>Missione completata!</h2>
+    <div style="font-weight:900;color:var(--muted)">Badge sbloccato: ${m.badge}</div>
+    <div class="stars">${[0,1,2].map(k=>`<span class="${k<st?'':'off'}">⭐</span>`).join('')}</div>
+    <div class="learn"><p style="margin:0 0 8px">🧠 <b>Lo sapevi?</b> ${m.fact}</p><p style="margin:0">🏫 <b>Al Righi:</b> ${m.righi}</p></div>
+    <div style="margin-top:16px"><button class="btn green" id="nx">${i===3?'Vedi il risultato 🏆':'Prossima missione ▶'}</button></div>
+  </div></div>`;
+  $('#nx').onclick=()=>go(i===3?'end':'map');
+}
+function confetti(){
+  const c=document.createElement('div');c.className='confetti';
+  const em=['🎉','⭐','✨','💜','🎊','💻'];
+  for(let k=0;k<40;k++){const s=document.createElement('i');s.textContent=em[k%em.length];s.style.left=Math.random()*100+'vw';s.style.animationDuration=(1.8+Math.random()*1.8)+'s';s.style.animationDelay=(Math.random()*.5)+'s';c.appendChild(s);}
+  document.body.appendChild(c);setTimeout(()=>c.remove(),4200);
+}
+
+/* ============================== MISSIONI ============================== */
+const GAMES={
+
+/* ---------- 1. Wi-Fi ---------- */
+wifi(ph,side,ctx){
+  const NETS=[
+   {n:'WiFi_GRATIS_VELOCE',lock:false,sig:4,why:'⚠️ Rete aperta, senza password: chiunque sia collegato potrebbe spiare quello che fai. Meglio di no!'},
+   {n:'Righi-Studenti',lock:true,sig:4,ok:true},
+   {n:'Righi-Studenti_FREE',lock:false,sig:3,why:'⚠️ Attenzione: è una rete falsa che copia il nome di quella della scuola per ingannarti, e non ha il lucchetto!'},
+   {n:'Casa_Rossi_5G',lock:true,sig:1,why:'⚠️ Questa è la rete di una casa vicina: non è la vostra e non conoscete la password.'}
+  ];
+  side.innerHTML=`<div class="cartello">📡 Wi-Fi STUDENTI<br>Rete: <b>Righi-Studenti</b><br>Password: <b>Righi2026!</b></div>`;
+  let step='list';
+  const sig=n=>`<span class="sig">${[1,2,3,4].map(k=>`<i class="${k<=n?'on':''}" style="height:${k*4}px"></i>`).join('')}</span>`;
+  function draw(msg){
+    if(step==='list'){
+      ph.innerHTML=phone(`<div class="scr"><div style="font-weight:900;color:var(--muted);font-size:13px;margin-bottom:4px">RETI DISPONIBILI</div>
+        ${NETS.map((x,k)=>`<button class="net" data-k="${k}">${sig(x.sig)}<span class="n">${x.n}<small>${x.lock?'Protetta':'Aperta'}</small></span>${x.lock?'🔒':''}</button>`).join('')}
+        ${msg||''}</div>`,'⚙️ Wi-Fi');
+      ph.querySelectorAll('.net').forEach(b=>b.onclick=()=>{const x=NETS[+b.dataset.k];
+        if(x.ok){step='pw';draw();}else{ctx.err('Rete sbagliata!');draw(`<div class="alert r">${x.why}</div>`);}});
+    }else if(step==='pw'){
+      ph.innerHTML=phone(`<div class="scr"><button class="btn light sm" id="bk">←</button>
+        <div style="text-align:center;margin:18px 0 6px;font-size:46px">🔒</div>
+        <div style="text-align:center;font-family:var(--head);font-size:22px">Righi-Studenti</div>
+        <p style="font-weight:700;color:var(--muted);text-align:center">Inserisci la password</p>
+        <input class="pwin" id="pw" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Password">
+        <button class="btn green" id="cn" style="width:100%">Connetti</button>${msg||''}</div>`,'⚙️ Wi-Fi');
+      $('#bk').onclick=()=>{step='list';draw();};
+      $('#cn').onclick=()=>{const v=$('#pw').value;
+        if(v==='Righi2026!'){step='ok';draw();setTimeout(ctx.win,1100);}
+        else{ctx.err('Password errata!');step='pw';draw(`<div class="alert r">❌ Password errata. ${v.toLowerCase()==='righi2026!'?'Attenti a maiuscole e minuscole!':'Controllate bene il cartello, anche il punto esclamativo.'}</div>`);}};
+    }else{
+      ph.innerHTML=phone(`<div class="scr" style="text-align:center;padding-top:80px"><div style="font-size:80px">📶</div><div style="font-family:var(--head);font-size:24px">Connesso!</div><div class="alert g">✅ Righi-Studenti · Internet disponibile</div></div>`,'⚙️ Wi-Fi');
+    }
+  }
+  draw();
+},
+
+/* ---------- 2. Phishing ---------- */
+phish(ph,side,ctx){
+  const SEG=[
+   {t:'🎉 Ciao Leo! ',trap:0},
+   {t:'Hai vinto 10.000 gemme GRATIS',trap:'🎁 Premio troppo bello per essere vero'},
+   {t:' per Galaxy Clash! ',trap:0},
+   {t:'Ritira il premio entro 5 minuti ⏰',trap:'⏰ Mette fretta per non farti pensare'},
+   {t:' cliccando qui 👉 ',trap:0},
+   {t:'ga1axy-clash-gift.com',trap:'🔗 Link falso: c\'è un "1" al posto della "l"'},
+   {t:' e ',trap:0},
+   {t:'inserisci la password del tuo account',trap:'🔑 Nessun sito serio ti chiede la password in chat'},
+   {t:'. Buon divertimento! 😊',trap:0}
+  ];
+  const SENDER='📵 Numero sconosciuto dall\'estero';
+  const found=new Set();let phase='find';
+  function drawSide(){
+    side.innerHTML=`<div class="counter">🚩 Trappole trovate: ${found.size} / 5</div>
+     <div class="flags">${[...found].map(k=>`<div class="flag">${k==='s'?SENDER:SEG[k].trap}</div>`).join('')}</div>
+     ${phase==='ask'?`<p style="margin-top:14px;font-family:var(--head);font-size:20px">Ottimo! E adesso cosa deve fare Leo con questo messaggio?</p>
+      <div class="choices" id="ch"><button data-k="0">Clicco subito, magari è vero</button><button data-k="1">Non clicco, blocco e segnalo il contatto e lo dico a un adulto</button><button data-k="2">Lo inoltro agli amici così vincono anche loro</button></div>`:''}`;
+    const ch=$('#ch');if(ch)ch.querySelectorAll('button').forEach(b=>b.onclick=()=>{if(b.dataset.k==='1')ctx.win();else ctx.err(b.dataset.k==='0'?'No! Cliccando si cade nella trappola.':'No! Così la truffa arriva anche ai vostri amici.');});
+  }
+  ph.innerHTML=phone(`<div class="chathead"><span>←</span><div class="av">👤</div><div style="flex:1"><div class="seg" id="snd" style="font-weight:900">+44 7700 900123</div><div style="font-size:12px;opacity:.85">online</div></div><span>⋮</span></div>
+   <div class="chat"><div style="text-align:center;margin-bottom:10px"><span style="background:#e1f2fb;border-radius:8px;padding:4px 10px;font-size:12px;font-weight:800">IERI</span></div>
+   <div class="msg" id="mm">${SEG.map((s,k)=>`<span class="seg" data-k="${k}">${esc(s.t)}</span>`).join('')}<span class="tm">21:47</span></div>
+   <div style="text-align:center;margin-top:12px;font-size:12px;font-weight:800;color:#555;background:#fff8c4;border-radius:8px;padding:6px">Questo mittente non è nei tuoi contatti</div></div>`);
+  const check=()=>{drawSide();if(found.size>=4&&phase==='find'){phase='ask';drawSide();setTimeout(()=>{const c=$('#ch');if(c)c.scrollIntoView({behavior:'smooth',block:'center'});},300);ctx.say(found.size===5?'Le avete trovate tutte! 🔥':'Ne avete trovate abbastanza! 👍',true);}};
+  $('#snd').onclick=()=>{if(found.has('s'))return;found.add('s');$('#snd').classList.add('found');check();};
+  ph.querySelectorAll('#mm .seg').forEach(s=>s.onclick=()=>{const k=+s.dataset.k;
+    if(SEG[k].trap){if(found.has(k))return;found.add(k);s.classList.add('found');check();}
+    else{s.classList.add('nope');setTimeout(()=>s.classList.remove('nope'),500);ctx.err('Questa parte non è sospetta. Cercate meglio!');}});
+  drawSide();
+},
+
+/* ---------- 3. Videogioco ---------- */
+game(ph,side,ctx){
+  side.innerHTML=`<div class="blocks">
+   <div class="blk ev">🏁 quando <select id="ev"><option value="">scegli…</option><option value="start">il gioco inizia</option><option value="tap">tocco lo schermo</option><option value="key">premo il tasto X</option></select> <span class="arrow">➜</span> il personaggio
+     <select id="ac"><option value="">scegli…</option><option value="sit">si siede</option><option value="jump">salta</option><option value="back">torna indietro</option></select></div>
+   <div class="blk if">🪙 se tocca una moneta <span class="arrow">➜</span> <select id="co"><option value="">scegli…</option><option value="minus">punti − 1</option><option value="plus">punti + 1</option><option value="reset">ricomincia</option></select></div>
+   <div class="blk if" style="background:#9966ff">🌵 se tocca un cactus <span class="arrow">➜</span> perde una vita ❤️</div>
+  </div>`;
+  ph.innerHTML=phone(`<div class="scr" style="padding:10px">
+    <div class="hud"><span id="hp">⭐ Punti: 0/5</span><span id="hl">❤️❤️❤️</span></div>
+    <canvas id="game" width="320" height="300"></canvas>
+    <button class="btn green tapbtn" id="play">▶ Gioca</button>
+    <button class="btn tapbtn hidden" id="tap">👆 TOCCA</button>
+    <div id="gmsg" style="text-align:center;font-weight:800;margin-top:6px;min-height:20px"></div></div>`,'🎮 Super Leo Run');
+  const cv=$('#game'),g=cv.getContext('2d');const W=320,H=300,GY=250;
+  let P,items,score,lives,frame,running=false,raf=null,won=false,inv=0;
+  const rules=()=>({ev:$('#ev').value,ac:$('#ac').value,co:$('#co').value});
+  function reset(){P={x:60,y:GY,vy:0};items=[];score=0;lives=3;frame=0;inv=0;}
+  function jump(){if(P.y>=GY-0.5){P.vy=-11.5;}}
+  function act(){const r=rules();if(r.ac==='jump')jump();else if(r.ac==='sit')msg('Il personaggio si siede… 🪑');else if(r.ac==='back')msg('Il personaggio torna indietro… ↩️');else msg('Manca il comando nel blocco arancione!');}
+  function msg(t){$('#gmsg').textContent=t;}
+  function hud(){$('#hp').textContent='⭐ Punti: '+score+'/5';$('#hl').textContent='❤️'.repeat(Math.max(0,lives))+'🤍'.repeat(3-Math.max(0,lives));}
+  const pattern=['c','k','c','c','k','c','k','c','c','k','c','c'];
+  function spawn(){const t=pattern[(frame/95|0)%pattern.length];items.push(t==='c'?{t:'c',x:W+20,y:GY-95,hit:false}:{t:'k',x:W+20,y:GY,hit:false});}
+  function drawScene(){
+    const sky=g.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#8fd3ff');sky.addColorStop(1,'#e8f7ff');g.fillStyle=sky;g.fillRect(0,0,W,H);
+    g.fillStyle='rgba(255,255,255,.9)';[[40,50],[200,30],[280,80]].forEach(([x,y],k)=>{const xx=((x-frame*0.3*(k+1))%(W+80)+W+80)%(W+80)-40;g.beginPath();g.arc(xx,y,16,0,7);g.arc(xx+18,y-6,20,0,7);g.arc(xx+38,y,15,0,7);g.fill();});
+    g.fillStyle='#5ccf6b';g.fillRect(0,GY,W,H-GY);g.fillStyle='#3fae50';for(let x=-(frame*2.6%40);x<W;x+=40)g.fillRect(x,GY,20,6);
+    items.forEach(o=>{if(o.hit&&o.t==='c')return;
+      if(o.t==='c'){g.fillStyle='#ffd23f';g.beginPath();g.arc(o.x,o.y,13,0,7);g.fill();g.strokeStyle='#e0a800';g.lineWidth=3;g.stroke();g.fillStyle='#e0a800';g.font='bold 14px Nunito';g.textAlign='center';g.fillText('$',o.x,o.y+5);}
+      else{g.font='34px serif';g.textAlign='center';g.fillText('🌵',o.x,o.y);}});
+    if(!(inv>0&&frame%8<4)){g.save();g.translate(P.x,P.y);g.scale(-1,1);g.font='40px serif';g.textAlign='center';g.fillText('🏃',0,0);g.restore();}
+  }
+  function step(){
+    frame++;if(frame%95===1)spawn();
+    P.vy+=0.55;P.y+=P.vy;if(P.y>GY){P.y=GY;P.vy=0;}
+    if(inv>0)inv--;
+    items.forEach(o=>{o.x-=2.6;
+      if(o.hit)return;
+      if(o.t==='c'){const dx=o.x-P.x,dy=o.y-(P.y-16);if(Math.abs(dx)<26&&Math.abs(dy)<32){o.hit=true;const c=rules().co;
+        if(c==='plus'){score++;msg('+1 punto! 🪙');}else if(c==='minus'){score--;msg('La moneta toglie punti?! 🤔');}else if(c==='reset'){score=0;msg('Il punteggio ricomincia da zero… 😵');}else msg('La moneta non fa niente: manca il comando nel blocco rosa!');hud();}}
+      else{if(Math.abs(o.x-P.x)<20&&P.y>GY-26&&inv===0){o.hit=true;lives--;inv=40;msg('Ahi, un cactus! 🌵');hud();}}});
+    items=items.filter(o=>o.x>-30);
+    drawScene();
+    if(score>=5){running=false;won=true;msg('🏆 5 punti! Il gioco funziona!');$('#tap').classList.add('hidden');setTimeout(ctx.win,900);return;}
+    if(lives<=0){running=false;msg('💥 Game over! Controllate i blocchi e riprovate.');ctx.err('Game over!');$('#play').classList.remove('hidden');$('#play').textContent='🔁 Riprova';$('#tap').classList.add('hidden');return;}
+    raf=requestAnimationFrame(step);
+  }
+  function start(){const r=rules();
+    if(!r.ev||!r.ac||!r.co){ctx.err('Completate tutti i blocchi prima di giocare!');return;}
+    reset();hud();msg('');ctx.say('');running=true;$('#play').classList.add('hidden');$('#tap').classList.remove('hidden');
+    if(r.ev==='start')setTimeout(act,200);
+    raf=requestAnimationFrame(step);}
+  function tapEvt(e){if(e)e.preventDefault();if(!running)return;const r=rules();
+    if(r.ev==='tap')act();else if(r.ev==='key')msg('Sul telefono non c\'è il tasto X! ⌨️❌');else msg('Il personaggio salta solo all\'inizio del gioco…');}
+  $('#play').onclick=start;$('#tap').addEventListener('pointerdown',tapEvt);cv.addEventListener('pointerdown',tapEvt);
+  const kd=e=>{if(!running)return;if(e.key==='x'||e.key==='X'){if(rules().ev==='key')act();}else if(e.code==='Space'){e.preventDefault();tapEvt();}};
+  window.addEventListener('keydown',kd);
+  stopGame=()=>{running=false;cancelAnimationFrame(raf);window.removeEventListener('keydown',kd);};
+  reset();drawScene();
+},
+
+/* ---------- 4. Algoritmo / IA ---------- */
+ai(ph,side,ctx){
+  const CAT={calcio:{n:'Calcio',e:'⚽',c:'linear-gradient(160deg,#19a35a,#0b6b3a)'},animali:{n:'Animali',e:'🐱',c:'linear-gradient(160deg,#ff9a3c,#ff5e62)'},
+    gaming:{n:'Gaming',e:'🎮',c:'linear-gradient(160deg,#7b2ff7,#2b0b6b)'},cucina:{n:'Cucina',e:'🍕',c:'linear-gradient(160deg,#ffcc33,#ff7b00)'},musica:{n:'Musica',e:'🎵',c:'linear-gradient(160deg,#00c2ff,#0050b3)'}};
+  const V=[['calcio','Gol in rovesciata all\'ultimo secondo','#calcio #gol'],['animali','Gattino contro cetriolo','#gatti #lol'],['gaming','Vittoria epica nel torneo online','#gaming #win'],
+    ['cucina','Pizza perfetta in 60 secondi','#pizza #ricetta'],['musica','Batterista di 12 anni fenomenale','#musica #talento'],['gaming','Il segreto per superare il livello 10','#gaming #trucchi'],
+    ['animali','Cane che fa skateboard','#cani #skate'],['calcio','Le 5 parate più assurde','#calcio #portiere']];
+  const NEXT={calcio:'Dribbling da campioni: tutorial',animali:'Pappagallo che canta la sigla dei cartoni',gaming:'Prova del nuovo gioco più atteso',cucina:'Tiramisù in 3 mosse',musica:'Canzone suonata con 10 bottiglie'};
+  let idx=0;const like={};let phase='feed';
+  function drawSide(extra){
+    side.innerHTML=phase==='feed'?`<p style="font-weight:800">Video ${Math.min(idx+1,V.length)} di ${V.length}. Siete voi l'utente: rispondete in modo sincero!</p>
+      <div class="bars">${Object.keys(CAT).map(k=>{const n=V.filter((v,j)=>j<idx&&v[0]===k&&like[j]).length;return `<div class="barrow"><span>${CAT[k].e} ${CAT[k].n}</span><div class="tr"><i style="width:${n*50}%"></i></div><span>${n} ❤️</span></div>`;}).join('')}</div>
+      <p class="small" style="color:var(--muted);font-weight:700;margin-top:8px">Questi sono i dati che l'app raccoglie su di voi.</p>`:(extra||'');
+  }
+  function drawVid(){
+    if(idx>=V.length){think();return;}
+    const [c,t,h]=V[idx];
+    ph.innerHTML=phone(`<div class="feed"><div class="vid" style="background:${CAT[c].c}"><span class="cnt">${idx+1}/${V.length}</span><div class="big">${CAT[c].e}</div><h4>${esc(t)}</h4><div class="tag">${h}</div></div>
+      <div class="vbtns"><button class="skip" id="sk">⏭ Salta</button><button class="like" id="lk">❤️ Mi piace</button></div></div>`);
+    $('#lk').onclick=()=>{like[idx]=true;idx++;drawVid();drawSide();};
+    $('#sk').onclick=()=>{like[idx]=false;idx++;drawVid();drawSide();};
+  }
+  function think(){
+    const nl=Object.values(like).filter(Boolean).length;
+    if(nl<2){ctx.err('Troppo pochi like: l\'algoritmo non ha abbastanza dati!');idx=0;for(const k in like)delete like[k];drawVid();drawSide();return;}
+    phase='think';
+    ph.innerHTML=phone(`<div class="scr"><div class="thinking">🤖<br>L'algoritmo sta studiando i vostri like<span class="dots"></span></div></div>`,'🤖 Algoritmo');
+    drawSide('<p style="font-weight:800">Sto analizzando i dati…</p>');
+    setTimeout(result,1600);
+  }
+  function result(){
+    phase='res';
+    const cnt={};Object.keys(CAT).forEach(k=>cnt[k]=0);V.forEach((v,j)=>{if(like[j])cnt[v[0]]++;});
+    const tot=Object.values(cnt).reduce((a,b)=>a+b,0);
+    const top=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]||V.findIndex(v=>v[0]===a&&like[V.indexOf(v)])-V.findIndex(v=>v[0]===b))[0];
+    ph.innerHTML=phone(`<div class="scr"><div style="font-family:var(--head);font-size:19px">📊 Il vostro profilo</div>
+      <div class="bars">${Object.keys(CAT).map(k=>`<div class="barrow"><span>${CAT[k].e} ${CAT[k].n}</span><div class="tr"><i style="width:${Math.round(cnt[k]/tot*100)}%"></i></div><span>${Math.round(cnt[k]/tot*100)}%</span></div>`).join('')}</div>
+      <div style="font-family:var(--head);font-size:19px;margin-top:14px">✨ Consigliato per voi</div>
+      <div class="reco" style="background:${CAT[top].c}"><div class="e">${CAT[top].e}</div><div><b>${NEXT[top]}</b><div style="font-size:13px;opacity:.9">#${top}</div></div></div></div>`,'🤖 Algoritmo');
+    drawSide(`<p style="font-family:var(--head);font-size:20px">L'app vi ha consigliato un video di <b>${CAT[top].n}</b>. Perché proprio questo?</p>
+      <div class="choices" id="ch"><button data-k="0">Ha scelto a caso tra tutti i video</button><button data-k="1">Ha imparato dai nostri like: è il tipo di video che ci è piaciuto di più</button><button data-k="2">Lo ha deciso una persona che lavora nell'app</button></div>`);
+    $('#ch').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(b.dataset.k==='1')ctx.win();else ctx.err('No: guardate le barre del vostro profilo!');});
+    if(window.innerWidth<820)setTimeout(()=>$('#ph').scrollIntoView({behavior:'smooth',block:'start'}),200);
+  }
+  drawVid();drawSide();
+}
+};
+
+/* ============================== FINE ============================== */
+function end(){
+  const tot=totStars();
+  setTimeout(confetti,200);
+  app.innerHTML=`
+  <section class="endhero"><div style="font-size:70px">🏆🧑‍💻</div>
+   <h1>Account salvato,<br><span>squadra ${esc(S.team)}!</span></h1>
+   <p style="font-size:18px;color:var(--muted);font-weight:700">Leo può partecipare al torneo. ⭐ ${tot} stelle su 12 · ⏱ ${fmt(elapsed())}</p>
+   <div class="badges">${M.map((m,i)=>`<div class="bdg"><div class="i" style="background:${m.g}">${m.e}</div><b>${m.badge}</b><small>${'⭐'.repeat(S.stars[i]||0)}</small></div>`).join('')}</div>
+  </section>
+  <div class="sec">
+    <h2>Oggi siete stati informatici 💻</h2>
+    <p>Quello che avete fatto è una piccola parte di ciò che si in <b>Informatica e Telecomunicazioni</b>, articolazione <b>Informatica</b>. Diventa <b>Tecnico informatico</b>: una persona che sa creare programmi e app, costruire e gestire reti e proteggere dati e sistemi.</p>
+    <div class="learnlist">
+      <div><span>👩‍💻</span>Programmare app, siti web e videogiochi</div>
+      <div><span>🌐</span>Costruire e gestire reti: Wi-Fi, server e Internet</div>
+      <div><span>🛡️</span>Difendere dati e persone dagli attacchi informatici</div>
+      <div><span>🤖</span>Usare i dati e capire l'intelligenza artificiale</div>
+    </div>
+  </div>
+  <div class="sec">
+    <h2>Da grande potresti diventare…</h2>
+    <div class="cards">
+      <div class="cardj" style="--g:linear-gradient(135deg,#18c964,#00b3a4)"><div class="e">🎮</div><b>Sviluppatore di app e giochi</b><p>Crea le app e i giochi che milioni di persone usano ogni giorno.</p></div>
+      <div class="cardj" style="--g:linear-gradient(135deg,#ff3b5c,#ff8a00)"><div class="e">🛡️</div><b>Esperto di cybersecurity</b><p>Difende aziende e persone da hacker e truffe online.</p></div>
+      <div class="cardj" style="--g:linear-gradient(135deg,#00c2ff,#3a7bff)"><div class="e">🌐</div><b>Tecnico di reti</b><p>Progetta e fa funzionare le reti di scuole, uffici e città.</p></div>
+      <div class="cardj" style="--g:linear-gradient(135deg,#7b2ff7,#f107a3)"><div class="e">🤖</div><b>Esperto di dati e IA</b><p>Usa i dati per costruire sistemi intelligenti.</p></div>
+    </div>
+    <p style="margin-top:14px">…oppure continuare a studiare all'<b>università</b> o in un <b>ITS Academy</b>. 
+  </div>
+  
+  <div class="foot"><button class="btn" id="again">🔁 Nuova partita</button></div>`;
+  $('#again').onclick=()=>{S=fresh();save();go('intro');};
+}
+
+render();
+</script>
+</body>
+</html>

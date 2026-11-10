@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Salva l'Account di Leo – Scegli il tuo Percorso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-dark: #0f172a;
+  --card-bg: #1e293b;
+  --accent-cyan: #00f0ff;
+  --accent-pink: #ff007f;
+  --accent-yellow: #ffc83d;
+  --text-light: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  --font-head: 'Fredoka', system-ui, sans-serif;
+  --font-body: 'Nunito', system-ui, sans-serif;
+}
+
+{ box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); background-color: var(--bg-dark); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow-x: hidden; position: relative; padding: 20px; }
+/* Griglia cibernetica di sfondo */ body::before { content: ""; position: fixed; inset: 0; background: linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px); background-size: 40px 40px; z-index: -2; }
+/* Effetti Luce Robot */ .glow-orb { position: fixed; border-radius: 50%; filter: blur(90px); opacity: 0.35; z-index: -1; pointer-events: none; } .orb-1 { width: 350px; height: 350px; background: var(--accent-cyan); top: -80px; left: -80px; } .orb-2 { width: 350px; height: 350px; background: var(--accent-pink); bottom: -80px; right: -80px; }
+.container { max-width: 1000px; width: 100%; text-align: center; display: flex; flex-direction: column; gap: 25px; }
+/* Header & Robot Avatar */ header { display: flex; flex-direction: column; align-items: center; gap: 15px; }
+.robot-head { width: 110px; height: 110px; position: relative; cursor: pointer; filter: drop-shadow(0 0 12px rgba(0, 240, 255, 0.4)); transition: transform 0.2s ease; }
+.robot-head:hover { transform: scale(1.08); }
+.robot-head svg { width: 100%; height: 100%; }
+/* Animazione occhi robot */ .eye { transform-box: fill-box; transform-origin: center; animation: blink 4s infinite; } @keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.1); } } .talking .mouth { animation: talk 0.25s infinite alternate; } @keyframes talk { from { transform: scaleY(1); } to { transform: scaleY(2.5); } }
+/* Fumetto Voce */ .speech-bubble { background: var(--card-bg); border: 2px solid var(--accent-cyan); border-radius: 20px; padding: 12px 20px; max-width: 600px; font-size: 1.1rem; font-weight: 700; color: var(--accent-cyan); box-shadow: 0 0 15px rgba(0, 240, 255, 0.15); position: relative; display: flex; align-items: center; gap: 10px; }
+.speech-bubble::after { content: ""; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); border-width: 0 10px 10px; border-style: solid; border-color: var(--accent-cyan) transparent; display: block; width: 0; }
+.sound-btn { background: transparent; border: none; font-size: 1.4rem; cursor: pointer; color: var(--accent-yellow); transition: transform 0.1s; } .sound-btn:active { transform: scale(0.9); }
+h1 { font-family: var(--font-head); font-size: clamp(2.2rem, 5vw, 3.5rem); letter-spacing: -0.02em; line-height: 1.1; text-transform: uppercase; background: linear-gradient(135deg, #ffffff 0%, var(--accent-cyan) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+h1 span { background: linear-gradient(135deg, var(--accent-pink) 0%, var(--accent-yellow) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+p.subtitle { font-size: 1.15rem; color: var(--text-muted); max-width: 700px; margin: 0 auto; }
+/* Griglia delle Opzioni / Percorsi */ .path-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 15px; }
+.card { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 28px; padding: 30px 25px; display: flex; flex-direction: column; justify-content: space-between; text-align: left; position: relative; overflow: hidden; transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; text-decoration: none; color: inherit; }
+.card:hover { transform: translateY(-6px); }
+.card-righi:hover { border-color: var(--accent-pink); box-shadow: 0 12px 30px rgba(255, 0, 127, 0.25); }
+.card-kids:hover { border-color: var(--accent-cyan); box-shadow: 0 12px 30px rgba(0, 240, 255, 0.25); }
+.badge { align-self: flex-start; padding: 6px 14px; border-radius: 999px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 15px; }
+.card-righi .badge { background: rgba(255, 0, 127, 0.15); color: var(--accent-pink); border: 1px solid rgba(255, 0, 127, 0.3); }
+.card-kids .badge { background: rgba(0, 240, 255, 0.15); color: var(--accent-cyan); border: 1px solid rgba(0, 240, 255, 0.3); }
+.card h2 { font-family: var(--font-head); font-size: 1.8rem; margin-bottom: 10px; }
+.card p { color: var(--text-muted); font-size: 1rem; line-height: 1.5; margin-bottom: 20px; }
+.features { list-style: none; margin-bottom: 25px; display: flex; flex-direction: column; gap: 8px; }
+.features li { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 0.95rem; }
+.features li::before { content: "⚡"; font-size: 0.9rem; }
+.btn-start { font-family: var(--font-head); font-size: 1.25rem; font-weight: 700; padding: 14px 24px; border-radius: 16px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: background-color 0.2s, transform 0.1s; color: #fff; text-decoration: none; }
+.card-righi .btn-start { background: linear-gradient(135deg, #7b2ff7 0%, var(--accent-pink) 100%); box-shadow: 0 4px 15px rgba(241, 7, 163, 0.4); }
+.card-kids .btn-start { background: linear-gradient(135deg, #10b5a3 0%, #3d9bf2 100%); box-shadow: 0 4px 15px rgba(61, 155, 242, 0.4); }
+.btn-start:active { transform: scale(0.98); }
+footer { margin-top: 20px; font-size: 0.9rem; color: var(--text-muted); }
+@media (max-width: 640px) { body { padding: 15px; } .path-grid { grid-template-columns: 1fr; } .speech-bubble { font-size: 1rem; } } </style>
+</head>
+<body>
+
+<div class="glow-orb orb-1"></div>
+<div class="glow-orb orb-2"></div>
+
+<main class="container">
+
+  <header>
+    <!-- Robot Avatar SVG -->
+    <div class="robot-head" id="robotAvatar" onclick="speakIntro()">
+      <svg viewBox="0 0 120 120" id="robotSVG">
+        <!-- Antenna -->
+        <line x1="60" y1="20" x2="60" y2="8" stroke="#00f0ff" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="60" cy="6" r="6" fill="#ffc83d"/>
+        <!-- Orecchie -->
+        <rect x="8" y="45" width="10" height="20" rx="4" fill="#334155" stroke="#00f0ff" stroke-width="2"/>
+        <rect x="102" y="45" width="10" height="20" rx="4" fill="#334155" stroke="#00f0ff" stroke-width="2"/>
+        <!-- Testa -->
+        <rect x="16" y="22" width="88" height="66" rx="20" fill="#1e293b" stroke="#00f0ff" stroke-width="4"/>
+        <!-- Schermo Faccia -->
+        <rect x="26" y="32" width="68" height="46" rx="12" fill="#0f172a"/>
+        <!-- Occhi -->
+        <g class="eye">
+          <circle cx="45" cy="50" r="8" fill="#00f0ff"/>
+          <circle cx="75" cy="50" r="8" fill="#00f0ff"/>
+          <circle cx="47" cy="47" r="2.5" fill="#ffffff"/>
+          <circle cx="77" cy="47" r="2.5" fill="#ffffff"/>
+        </g>
+        <!-- Bocca -->
+        <rect class="mouth" x="48" y="66" width="24" height="5" rx="2.5" fill="#ffc83d"/>
+      </svg>
+    </div>
+
+<div class="speech-bubble">
+  <span id="speechText">Ciao! Sono Leo. Scegli la versione perfetta per te e aiutami a salvare il mio account!</span>
+  <button class="sound-btn" onclick="toggleAudio()" title="Attiva/Disattiva Audio">🔊</button>
+</div>
+
+<h1>Salva l'Account di <span>Leo</span></h1>
+<p class="subtitle">Impara l'informatica e la sicurezza digitale risolvendo 4 avvincenti missioni interattive!</p>
+  </header>
+
+  <section class="path-grid">
+
+<!-- Opzione 1: Boys (Scuola secondario di 1° e 2° grado) -->
+<a href="boys.html" class="card card-righi" onmouseenter="playHover()" onclick="speakCard('righi')">
+  <div>
+    <span class="badge">Scuola Secondaria</span>
+    <h2>Prima Edizione</h2>
+    <p>Pensata per studenti orientati all'Informatica e alla Cybersecurity. Scopri le materie scolastiche e i percorsi del futuro!</p>
+    <ul class="features">
+      <li>Grafica moderna ed esaustiva</li>
+      <li>Approfondimenti su Sistemi, Reti e IA</li>
+     
+    </ul>
+  </div>
+  <div class="btn-start">
+    <span>Percorso Righi</span> 🚀
+  </div>
+</a>
+
+<!-- Opzione 2: Kids (Scuola Primaria e Secondaria I Grado) -->
+<a href="kids.html" class="card card-kids" onmouseenter="playHover()" onclick="speakCard('kids')">
+  <div>
+    <span class="badge">Per i più Piccoli & Junior</span>
+    <h2>Edizione Kids</h2>
+    <p>Un'esperienza giocosa e colorata con testi semplificati, icone grandi, pulsanti interattivi ed elementi audio guidati.</p>
+    <ul class="features">
+      <li>Grafica in stile sticker & toy game</li>
+      <li>Spiegazioni vocali ed elementi audio</li>
+      <li>Profili personalizzabili con personaggi</li>
+    </ul>
+  </div>
+  <div class="btn-start">
+    <span>Percorso Kids</span> 🎮
+  </div>
+</a>
+  </section>
+
+  <footer>
+    <p>FrancescoPicca@2026 🤖 IISS "Augusto Righi" TARANTO – Laboratorio di Informatica e Cybersecurity</p>
+  </footer>
+
+</main>
+
+<script>
+// Gestione Audio e Sintesi Vocale
+let audioEnabled = true;
+let isSpeaking = false;
+
+
+// Audio Context per effetti sonori (SFX)
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  return audioCtx;
+}
+
+
+function playTone(freq, duration, type = 'sine') {
+  if (!audioEnabled) return;
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.05, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + duration);
+  } catch (e) {}
+}
+
+
+function playHover() {
+  playTone(440, 0.08, 'triangle');
+}
+
+
+// Sintesi Vocale (Text to Speech)
+function speakText(text) {
+  if (!audioEnabled || !('speechSynthesis' in window)) return;
+  
+  window.speechSynthesis.cancel();
+  
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'it-IT';
+  utterance.rate = 0.95;
+  utterance.pitch = 1.2;
+
+
+  const robotAvatar = document.getElementById('robotAvatar');
+
+
+  utterance.onstart = () => {
+    isSpeaking = true;
+    robotAvatar.classList.add('talking');
+  };
+
+
+  utterance.onend = () => {
+    isSpeaking = false;
+    robotAvatar.classList.remove('talking');
+  };
+
+
+  utterance.onerror = () => {
+    isSpeaking = false;
+    robotAvatar.classList.remove('talking');
+  };
+
+
+  window.speechSynthesis.speak(utterance);
+}
+
+
+function speakIntro() {
+  playTone(587, 0.1, 'square');
+  const txt = "Ciao! Sono Leo. Clicca su uno dei due percorsi per aiutarmi a recuperare il mio account di gioco!";
+  document.getElementById('speechText').textContent = txt;
+  speakText(txt);
+}
+
+
+function speakCard(type) {
+  if (type === 'righi') {
+    speakText("Hai scelto l'Edizione IISS Righi! Iniziamo l'avventura informatica.");
+  } else {
+    speakText("Hai scelto l'Edizione Kids! Giochiamo e impariamo insieme!");
+  }
+}
+
+
+function toggleAudio() {
+  audioEnabled = !audioEnabled;
+  const btn = document.querySelector('.sound-btn');
+  btn.textContent = audioEnabled ? '🔊' : '🔇';
+  if (!audioEnabled && 'speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    document.getElementById('robotAvatar').classList.remove('talking');
+  } else if (audioEnabled) {
+    speakIntro();
+  }
+}
+
+
+// Avvio automatico audio/messaggio al primo click
+window.addEventListener('DOMContentLoaded', () => {
+  document.body.addEventListener('click', () => {
+    getAudioCtx();
+  }, { once: true });
+});
+</script>
+
+</body>
+</html>
